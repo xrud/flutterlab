@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'tela2.dart';
 
 import 'constants.dart';
 
 class MyHomePage extends StatefulWidget {
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _tela1 createState() => _tela1();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _tela1 extends State<MyHomePage> {
 
   @override
   void initState() {
@@ -24,8 +25,16 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(APP_NAME),
       ),
       body: Center(
-        child: Text("Tela Inicial")
-      ), 
+        child: RaisedButton(
+          child: Text('Open route'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondRoute()),
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -59,7 +59,7 @@ class _tela1State extends State<tela1> {
               style: Theme.of(context).textTheme.display1,
             ),
 
-            //###### Widget novo ######################
+       //###### Widget novo ######################
        RaisedButton(
           child: Text('Ir para tela 2'),
           onPressed: () {
