@@ -10,7 +10,7 @@ class MyHomePage extends StatefulWidget {
   _tela1 createState() => _tela1();
 }
 
-class _tela1 extends State<MyHomePage> {
+class _tela1 extends State < MyHomePage > {
 
   @override
   void initState() {
