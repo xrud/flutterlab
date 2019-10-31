@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'widgets.dart';
+import 'constants.dart';
 
  void main() => runApp(MyApp());
 
@@ -11,13 +12,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: nomeDoApp,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Welcome to Flutter'),
+          title: Text(nomeDoApp),
         ),
         body: Center(
-          child: texto('Olá mundo novamente'),
+          child: flatBotao(),
+
           
         ),
       ),
