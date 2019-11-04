@@ -5,6 +5,11 @@
 import 'package:flutter/material.dart';
 import 'dart:convert'; // Para leituras de JSON
 import 'lendoJSON.dart';
+import 'widgets.dart';
+import 'package:flutter/services.dart';
+import 'tela2.dart';
+import 'pegandoJSONCodigo.dart';
+import 'constants.dart';
 
 void main() => runApp(TelaWeb(post: fetchPost()));
 class TelaWeb extends StatelessWidget {
@@ -26,21 +31,21 @@ class TelaWeb extends StatelessWidget {
           // Conteúdo
           
       
-    child: 
-
-    FutureBuilder<Post>(
-  future: fetchPost(),
-  builder: (context, snapshot) {
-    if (snapshot.hasData) {
-      return Text('Id :' + snapshot.data.id.toString() + '\n\ntitle : ' + 
-              snapshot.data.title + '\n\nbody : ' + snapshot.data.body);
-    } else if (snapshot.hasError) {
-      return Text("${snapshot.error}");
-    }
-    // exibe um spinner carregando 
-    return CircularProgressIndicator();
-  },
-)
+    child: FutureBuilder<Post>(
+            future: post,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Id :' + snapshot.data.id.toString() + '\n\ntitle : ' 
++ snapshot.data.title + '\n\nbody : ' + snapshot.data.body),
+                );
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return CircularProgressIndicator();
+            },
+          ),
           //
           
         ),

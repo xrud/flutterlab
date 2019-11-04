@@ -1,0 +1,753 @@
+
+<!-- saved from url=(0044)http://www.macoratti.net/19/06/flut_web1.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<title>Flutter - Obtendo dados da Web </title>
+<style type="text/css">
+body {
+	margin:0;
+	padding:0;
+	background:#cccccc;
+	text-align:center; /* hack para o IE */	
+}
+#tudo {
+	width: 955px;
+	margin:0 auto;			
+	padding: 5px;
+	text-align:left; /* "remédio" para o hack do IE */	
+}
+#conteudo {
+	padding: 5px;
+	background-color: #ffffff;
+}
+.fontstyle0
+{
+	font-family:LiberationSerif;
+	font-size:15pt;
+	font-style:normal;
+	font-weight:normal;
+	color:rgb(0,0,0);
+}
+.fontstyle1
+{
+	font-family:LiberationSerif;
+	font-size:15pt;
+	font-style:normal;
+	font-weight:normal;
+	color:rgb(0,0,0);
+}
+.fontstyle2
+{
+	font-family:LiberationMono;
+	font-size:12pt;
+	font-style:normal;
+	font-weight:normal;
+	color:rgb(0,0,0);
+}
+</style></head>
+
+
+<body>
+<div id="tudo">
+<div id="conteudo">
+
+
+<p><b><font color="#004080" size="5" face="Segoe UI">&nbsp;</font></b><strong><font color="#000080" size="5" face="Trebuchet MS"><img border="0" src="./Flutter - Obtendo dados da Web_files/maco10.gif" width="233" height="32"></font></strong><font color="#800080" size="5" face="Segoe UI"><b>Flutter 
+- </b></font><b><font face="Segoe UI" size="5" color="#800080">Obtendo dados da 
+Web (REST)</font></b></p>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="98%">
+  <tbody><tr>
+    <td width="5%" align="center">
+    <font face="Trebuchet MS" size="3">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">
+    <img border="0" src="./Flutter - Obtendo dados da Web_files/mac3_1.jpg" width="73" height="92"></span></font></td>
+    <td width="83%">
+    <span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Hoje veremos 
+	como podemos obter dados da internet e exibí-los em aplicações Flutter.</font></span></td>
+    <td width="10%">
+    <p align="center"><img border="0" src="./Flutter - Obtendo dados da Web_files/flut_1.png" width="40" height="49"></p></td>
+  </tr>
+</tbody></table>
+
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O Flutter é um 
+SDK de aplicativo móvel do Google que ajuda a criar aplicativos móveis modernos 
+para iOS e Android usando uma única (<i>quase</i>) base de código.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Se você não 
+conhece o Flutter veja o meu artigo :&nbsp; <a href="http://www.macoratti.net/19/07/flut_intro1.htm">Flutter - 
+Primeiros contatos e impressões</a></font></span></p>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">Obtendos dados da internet</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Atualmente 
+obter dados da internet é um requisito básico em muitas aplicações, e, o Flutter 
+e o Dart nos fornecem ferramentas para realizar esse trabalho.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O roteiro 
+básico a seguir é :</font></span></p>
+<ul>
+	<li><font face="Trebuchet MS" color="#0000FF">
+	<span style="letter-spacing: 0.05em">Adicionar o pacote http;</span></font></li>
+	<li><font face="Trebuchet MS" color="#0000FF">
+	<span style="letter-spacing: 0.05em">Fazer uma requisição na internet usando o 
+	pacote http;</span></font></li>
+	<li><font face="Trebuchet MS" color="#0000FF">
+	<span style="letter-spacing: 0.05em">Converter a resposta em um objeto Dart 
+	personalizado;</span></font></li>
+	<li><font face="Trebuchet MS" color="#0000FF">
+	<span style="letter-spacing: 0.05em">Pegar e Exibir os dados com o Flutter;</span></font></li>
+</ul>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">É isso que 
+iremos fazer neste artigo a seguir mostrando como realizar cada uma das etapas 
+acima.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Antes de 
+iniciar precisamos definir qual a nossa fonte de dados, ou seja, qual a URL 
+vamos acessar para obter dados.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Existem muitas 
+opções, e , neste exemplo vou acessar a url :
+<a href="https://jsonplaceholder.typicode.com/posts">
+https://jsonplaceholder.typicode.com/posts</a> que retorna dados no formato JSON 
+conforme abaixo:</font></span></p>
+<table border="1" width="88%" bordercolor="#F2F2F2">
+	<tbody><tr>
+		<td bgcolor="#F2F2F2"><font face="Trebuchet MS" size="2">
+		<span style="letter-spacing: 0.05em">[<br>
+&nbsp; <font color="#0000FF">{<br>
+&nbsp;&nbsp;&nbsp; "userId": 1,<br>
+&nbsp;&nbsp;&nbsp; "id": 1,<br>
+&nbsp;&nbsp;&nbsp; "title": "sunt aut facere repellat provident occaecati 
+		excepturi optio reprehenderit",<br>
+&nbsp;&nbsp;&nbsp; "body": "quia et suscipit\nsuscipit recusandae consequuntur 
+		expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum 
+		est autem sunt rem eveniet architecto"<br>
+&nbsp; }</font>,<br>
+&nbsp; {<br>
+&nbsp;&nbsp;&nbsp; "userId": 1,<br>
+&nbsp;&nbsp;&nbsp; "id": 2,<br>
+&nbsp;&nbsp;&nbsp; "title": "qui est esse",<br>
+&nbsp;&nbsp;&nbsp; "body": "est rerum tempore vitae\nsequi sint nihil 
+		reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate 
+		porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis 
+		possimus qui neque nisi nulla"<br>
+&nbsp; },<br>
+&nbsp; {<br>
+&nbsp;&nbsp;&nbsp; "userId": 1,<br>
+&nbsp;&nbsp;&nbsp; "id": 3,<br>
+&nbsp;&nbsp;&nbsp; "title": "ea molestias quasi exercitationem repellat qui ipsa 
+		sit aut",<br>
+&nbsp;&nbsp;&nbsp; "body": "et iusto sed quo iure\nvoluptatem occaecati omnis 
+		eligendi aut ad\nvoluptatem doloribus vel accusantium quis 
+		pariatur\nmolestiae porro eius odio et labore et velit aut"<br>
+&nbsp; },<br>
+&nbsp; {<br>
+&nbsp;&nbsp;&nbsp; ...<br>
+&nbsp;&nbsp;&nbsp; ...<br>
+		]</span></font></td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Mais 
+informações você obtém no site : <a href="https://jsonplaceholder.typicode.com/">
+https://jsonplaceholder.typicode.com/</a></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Para a API que 
+vamos usar os métodos HTTP disponíveis são:</font></span></p>
+<table width="484" cellspacing="0" cellpadding="0" border="1">
+	<tbody><tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">GET</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		<a href="https://jsonplaceholder.typicode.com/posts">/posts</a> </span>
+		</font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">GET</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		<a href="https://jsonplaceholder.typicode.com/posts/1">/posts/1</a>
+		</span></font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">GET</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		<a href="https://jsonplaceholder.typicode.com/posts/1/comments">
+		/posts/1/comments</a> </span></font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">GET</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		<a href="https://jsonplaceholder.typicode.com/comments?postId=1">
+		/comments?postId=1</a> </span></font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">GET</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		<a href="https://jsonplaceholder.typicode.com/posts?userId=1">
+		/posts?userId=1</a> </span></font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">POST</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		/posts</span></font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">PUT</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		/posts/1</span></font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">PATCH</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		/posts/1</span></font></td>
+	</tr>
+	<tr>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		DELETE</span></font></td>
+		<td><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">
+		/posts/1</span></font></td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">Criando o projeto Flutter</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Vamos começar 
+criando o projeto flutter.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Eu estou usando 
+o Flutter<font color="#0000FF"> versão 1.2.1</font>, e como editor de código estou usando o&nbsp;VS Code com 
+o plugin
+<font color="#0000FF">Flutter</font> instalado.</font></span></p>
+<p><img border="0" src="./Flutter - Obtendo dados da Web_files/flut_layout14.png" width="627" height="304"></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">No Visual 
+Studio Code tecle <font color="#0000FF">CTRL+ SHIFT+P</font> para abrir a <u>
+paleta de comandos</u> e a seguir selecione a opção : <b><font color="#0000FF">
+Fluter:New Project</font></b></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">A seguir informe o nome do projeto : 
+<font color="#0000FF">flutter_http_web</font> 
+e tecle <font color="#0000FF">ENTER.</font></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Na janela de 
+diálogo a seguir, selecione a pasta onde o projeto vai ser salvo e clique em :
+<br>
+<font color="#0000FF">Select a folder to create the project in</font></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O Flutter vai 
+criar um projeto padrão onde todo o código da aplicação vai estar no arquivo <b>
+<font color="#0000FF">main.dart</font></b> dentro da pasta <font color="#0000FF">
+<b>lib</b></font> do projeto.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">A seguir 
+podemos abrir o projeto usando o VS Code usando a opção <font color="#0000FF">
+Open folder</font> e escolhendo a pasta <font color="#0000FF">flutter_http_web</font>.</font></span></p>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">1- Adicionar o pacote http</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O pacote http 
+fornece a maneira mais simples de buscar dados da Internet.<br>
+<br>
+Para instalar o pacote <font color="#0000FF">http</font>, você deve adicioná-lo à seção de dependências do 
+arquivo <font color="#0000FF">pubspec.yaml</font> do projeto Flutter. Você pode 
+encontrar a versão mais recente do pacote http neste
+<a href="https://pub.dartlang.org/packages/http#-installing-tab-">link</a>.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Hoje, abril de 
+2019, a versão atual deste pacote é a versão :&nbsp; </font></span>
+<font face="Trebuchet MS" color="#0000FF">
+<span style="letter-spacing: 0.05em; font-weight: 700">http 0.12.0+2</span></font></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Conforme a
+<a href="https://pub.dartlang.org/packages/http#-readme-tab-">documentação</a> 
+temos que usar o pacote </font></span><b><font color="#0000FF">http 0.12.0+2
+</font></b><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">que 
+contém um conjunto de funções de alto nível que torna fácil consumir recursos 
+HTTP. Sendo independente de plataforma e podendo ser usado na linha de comando e 
+no browser.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Para isso 
+vamos incluir no arquivo<font color="#0000FF"> pubspec.yaml</font> a referência 
+ao pacote <font color="#0000FF"><b>http: ^0.12.0.0+2</b></font> conforme abaixo:</font></span></p>
+<p><img border="0" src="./Flutter - Obtendo dados da Web_files/flut_lisb32.jpg" width="612" height="427"></p>
+<p><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">Além disso 
+vamos ter que importar o pacote :<font color="#0000FF"> import 
+'package:http/http.dart'; </font></span></font>
+<span style="letter-spacing: 0.05em"><font face="Trebuchet MS">no arquivo
+<font color="#0000FF">main.dart</font>.</font></span></p>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">2- Fazer uma requisição web 
+usando o pacote http</font></span></p>
+<p><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">Já sabemos que 
+vamos acessar a API REST disponível em
+<a href="https://jsonplaceholder.typicode.com/">JSONPlaceholder</a>, assim, um 
+exemplo de código fazendo uma requisição HTTP com o método <font color="#0000FF">
+Get()</font> pode ser vista abaixo: (<i>obtido da documentação</i>)</span></font></p>
+<table border="0" width="73%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  <font color="#0000FF"><b>Future</b>&lt;String&gt;</font> getJSONData() <font color="#0000FF">async</font> {
+    var response = <font color="#0000FF">await</font> http.get(
+        Uri.encodeFull("https://jsonplaceholder.typicode.com/posts/1</span></font><span style="letter-spacing: 0.05em"><font face="Trebuchet MS" size="3">"),
+        headers: {<font color="#0000FF">"Accept": "application/json"</font>}
+    );</font></span></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">    <font color="#0000FF">setState</font>(() {
+<font color="#808000">      // otem os dados JSON</font>
+      data = <font color="#0000FF">json.decode(response.body)['results'];</font>
+    });</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">    return "Dados obtidos com sucesso";
+}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">No código 
+acima você pode estranhar o uso de <b> <font color="#0000FF">Future</font></b>. </font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O que é Future ?</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Um 
+<font color="#0000FF">Future</font> é um 
+objeto<font color="#0000FF"> Future&lt;T&gt;</font>, que representa uma operação 
+assíncrona que produz um resultado do tipo T. Se o resultado não for um valor 
+utilizável, o tipo Future será <font color="#0000FF">Future&lt;void&gt;</font>. 
+Quando uma função que retorna um Future é invocada, duas coisas acontecem:<br>
+<br>
+1- A função enfileira o trabalho a ser feito e retorna um objeto 
+<font color="#0000FF">Future</font> não 
+concluído.<br>
+2- Posteriormente, quando a operação for concluída, o objeto 
+<font color="#0000FF">Future</font> será 
+concluído com um valor ou com um erro.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">E quando 
+escrevemos código que depende de um <font color="#0000FF">Future</font> podemos usar<font color="#0000FF"> 
+async e await.</font></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">A seguir 
+definimos a url e o cabeçalho<font color="#0000FF"> application/json </font>e 
+obtemos os dados atualizando o estado.</font></span></p>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">3- Converter a resposta em um objeto Dart 
+	personalizado</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Embora seja 
+fácil fazer uma requisição na web, trabalhar com <font color="#0000FF">
+Future&lt;http.Response&gt;</font> não é muito conveniente. Para tornar nossa vida 
+mais fácil, precisamos converter o <font color="#0000FF">http.Response</font> em 
+um objeto <font color="#0000FF">Dart</font>.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">A resposta da 
+API REST quando acessarmos o <u>endpoint</u> terá o seguinte formato JSON:</font></span></p>
+<table border="1" width="88%" bordercolor="#F2F2F2">
+	<tbody><tr>
+		<td bgcolor="#F2F2F2"><font face="Trebuchet MS" size="3">
+		<span style="letter-spacing: 0.05em">&nbsp;<font color="#0000FF"> {<br>
+&nbsp;&nbsp;&nbsp; "userId": 1,<br>
+&nbsp;&nbsp;&nbsp; "id": 1,<br>
+&nbsp;&nbsp;&nbsp; "title": "sunt aut facere repellat provident occaecati 
+		excepturi optio reprehenderit",<br>
+&nbsp;&nbsp;&nbsp; "body": "quia et suscipit\nsuscipit recusandae consequuntur 
+		expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum 
+		est autem sunt rem eveniet architecto"<br>
+&nbsp; }</font></span></font></td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Precisamos 
+criar uma classe que represente o modelo de domínio para esta estrutura JSON.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Podemos fazer 
+isso manualmente ou usar o recurso disponível neste site:
+<a href="https://app.quicktype.io/">https://app.quicktype.io/</a></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Essa 
+ferramenta criará suas classes de modelo, os métodos de fábrica e os métodos de 
+conversão. </font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Abaixo temos o 
+resultado final obtido para o formato JSON retornado pela API REST:</font></span></p>
+<table border="0" width="51%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<div id="code-excerpt-2">
+			<pre class="highlight"><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">class <font color="#0000FF"><b>Post</b></font> {
+  final int userId;
+  final int id;
+  final String title;
+  final String body;
+
+  Post({this.userId, this.id, this.title, this.body});
+
+  factory <font color="#0000FF">Post.fromJson(Map&lt;String, dynamic&gt; json)</font> {
+    return Post(
+    <font color="#0000FF">  userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+      body: json['body'],</font>
+    );
+  }
+}</span></font></pre>
+		</div>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Agora, vamos 
+definir um método <font color="#0000FF"><b>fetchPost</b></font> para retornar um
+<font color="#0000FF">Future&lt;Post&gt;</font>.Para fazer isso, teremos que fazer o 
+seguinte:</font></span></p>
+<ul>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Converter 
+	o <font color="#0000FF">body</font> da resposta em um json
+	<font color="#0000FF">Map</font> com o pacote :&nbsp; <font color="#0000FF">
+	dart: convert ;</font></font></span></li>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Se o 
+	servidor retornar uma <font color="#0000FF">resposta “OK”</font> com um 
+	código de <font color="#0000FF">status 200</font>, converter o json Map em 
+	um <font color="#0000FF">Post</font> usando o método de fábrica
+	<font color="#0000FF">fromJson;</font></font></span></li>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Se o 
+	servidor retornar uma resposta inesperada, enviar um erro;</font></span></li>
+</ul>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Abaixo temos o 
+código do método <font color="#0000FF">fetchPost</font>() :</font></span></p>
+<table border="0" width="74%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<div id="code-excerpt-3">
+			<pre class="highlight"><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">Future&lt;Post&gt; <b><font color="#0000FF">fetchPost</font></b>() async {
+  final response = await http.get(<font color="#0000FF">'https://jsonplaceholder.typicode.com/posts/1</font>');
+
+  if (response.statusCode == 200) {
+    <font color="#808000">// se o servidor retornar um response OK, vamos fazer o parse no JSON</font>
+    return Post.fromJson(json.decode(<font color="#0000FF">response.body</font>));
+  } else {
+<font color="#808000">    // se a responsta não for OK , lançamos um erro
+</font>    throw Exception('Failed to load post');
+  }
+}</span></font></pre>
+		</div>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Agora estamos 
+obtendo os dados via <font color="#0000FF">get</font> http do
+<u>
+<font color="#0000FF">endpoint</font></u> : </font></span>
+<font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">
+<font color="#0000FF">https://jsonplaceholder.typicode.com/posts/1</font></span></font></p>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">4- Pegar e Exibir os dados com o Flutter;</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Para buscar os 
+dados e exibi-los na tela, você pode usar o widget <font color="#0000FF">
+FutureBuilder</font>. Este Widget vem com o Flutter e facilita o trabalho com 
+fontes de dados <u>assíncronas</u>.<br>
+<br>
+Você deve fornecer dois parâmetros:</font></span></p>
+<ul>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O
+	<font color="#0000FF">Future</font> com o qual você quer trabalhar. Nesse 
+	caso, chame a função <font color="#0000FF">fetchPost</font>();</font></span></li>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Uma 
+	função de construtor que informa ao Flutter o que processar, dependendo do 
+	estado do Future: <font color="#0000FF">loading,sucess ou err;</font></font></span></li>
+</ul>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">A seguir vemos 
+o código usando o widget <font color="#0000FF">FutureBuilder</font>:</font></span></p>
+<table border="0" width="97%">
+	<tbody><tr>
+		<td bgcolor="#F2F2F2">
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em"><font color="#0000FF">FutureBuilder</font>&lt;Post&gt;(
+  future: <b><font color="#0000FF">fetchPost</font></b>(),
+  builder: (context, snapshot) {
+    if (snapshot.<b>hasData</b>) {
+<font color="#0000FF">      return Text('Id :' + snapshot.data.id.toString() + '\n\ntitle : ' + 
+              snapshot.data.title + '\n\nbody : ' + snapshot.data.body);
+</font>    } else if (snapshot.<b>hasError</b>) {
+      return Text("$<font color="#0000FF">{snapshot.error</font>}");
+    }
+<font color="#0000FF">   </font><font color="#808000"> // exibe um spinner carregando </font>
+    return CircularProgressIndicator();
+  },
+);</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Embora seja 
+conveniente, não é recomendável fazer uma chamada para uma API em um método
+<font color="#0000FF">build</font>().<br>
+<br>
+O Flutter chama o método <font color="#0000FF">build</font>() toda vez que ele 
+quer mudar alguma coisa na view, e isso acontece com frequência. Se fizermos a 
+chamada ao método que faz a requisição para o <u>endpoint</u> no
+<font color="#0000FF">build</font>(), iremos inundar a&nbsp; API com chamadas 
+desnecessárias impactando o desempenho da aplicação.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Podemos passar 
+a chamada em um widget <font color="#0000FF">StateleslWidget</font> onde o&nbsp;widget pai é responsável por chamar o método de <font color="#0000FF">
+fetchPost</font>, armazenar seu resultado e, em seguida, transmiti-lo ao seu 
+widget.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Para facilitar 
+vamos colocar todo o código no arquivo <font color="#0000FF">main.dart</font>. 
+Veja como ficou o código completo:</font></span></p>
+<table border="0" width="69%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<pre><font face="Trebuchet MS" size="3" color="#0000FF"><span style="letter-spacing: 0.05em">import 'dart:async';
+import 'dart:convert';</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3" color="#0000FF"><span style="letter-spacing: 0.05em">import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">Future&lt;Post&gt; <font color="#0000FF">fetchPost</font>() async {
+  final response = await http.get('<font color="#0000FF">https://jsonplaceholder.typicode.com/posts/2</font>');</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  if (response.statusCode == 200) {
+    return <font color="#0000FF">Post.fromJson(json.decode(response.body));</font>
+  } else {
+    throw Exception('Falha ao carregar um post');
+  }
+}</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3" color="#800080"><span style="letter-spacing: 0.05em">class <b>Post</b> {
+  final int userId;
+  final int id;
+  final String title;
+  final String body;</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3" color="#800080"><span style="letter-spacing: 0.05em">  Post({this.userId, this.id, this.title, this.body});</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3" color="#800080"><span style="letter-spacing: 0.05em">  factory <b>Post.fromJson</b>(Map&lt;String, dynamic&gt; json) {
+    return Post(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+      body: json['body'],
+    );
+  }
+}</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3" color="#800080"><span style="letter-spacing: 0.05em">void main() =&gt; runApp(MyApp(post: <b>fetchPost()</b>));</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">class MyApp extends <font color="#800080">StatelessWidget</font> {
+  <font color="#0000FF">final Future&lt;Post&gt; post;</font></span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  <font color="#0000FF">MyApp</font>({Key key, this.post}) : super(key: key);</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  @override
+  Widget build(BuildContext context) {
+    return <font color="#0000FF">MaterialApp</font>(
+      title: 'Obtendo dados da Web - Exemplo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: <font color="#0000FF">Scaffold</font>(
+        appBar: <font color="#0000FF">AppBar</font>(
+          title: Text('Pegando dados da Web'),
+        ),
+        body: Center(
+       <font color="#0000FF">   child: FutureBuilder&lt;Post&gt;(</font>
+            future: post,
+            builder: (context, snapshot) {
+              if (<font color="#0000FF">snapshot.hasData</font>) {
+                return <font color="#0000FF">Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Id :' + snapshot.data.id.toString() + '\n\ntitle : ' 
++ snapshot.data.title + '\n\nbody : ' + snapshot.data.body),
+                );</font>
+              } else if (<font color="#0000FF">snapshot.hasError</font>) {
+                return Text("${snapshot.error}");
+              }
+              return CircularProgressIndicator();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Para executar podemos pressionar <b>F5</b> ou no terminal de comandos, estando 
+posicionado na pasta do projeto, basta digitar :&nbsp; <b>
+<font size="4" color="#000080">flutter run -d all</font></b></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Executando o 
+projeto iremos obter o resultado abaixo:</font></span></p>
+<p><img border="0" src="./Flutter - Obtendo dados da Web_files/flut_web11.jpg" width="360" height="590"></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Dessa forma 
+mostramos como fazer uma requisição http e consumir dados de uma API REST 
+exibindo os dados em um Widget.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Pegue o 
+projeto do arquivo<font color="#0000FF"> main.dart </font>aqui:  
+<img border="0" src="./Flutter - Obtendo dados da Web_files/downl.gif" width="16" height="16"><b>
+<a href="http://www.macoratti.net/19/06/main_dart_http.zip">main_dart_http.zip</a></b></font></span></p>
+<p><font face="Segoe UI"><span style="letter-spacing: 0.05em">"E, quanto 
+fizerdes por palavras ou por obras, fazei tudo em nome do Senhor Jesus, dando 
+por ele graças a Deus Pai."<br>
+<a href="https://www.bibliaonline.com.br/acf/cl/3/17+">Colossenses 3:17</a></span></font></p>
+
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="81%" bgcolor="#FFFFE1">
+  <tbody><tr>
+    <td width="90%" bordercolor="#FFFFE1" bgcolor="#F2F2F2">
+	<font face="Trebuchet MS" size="2">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875"><a href="http://www.macoratti.net/destaque.htm">
+    Veja os </a>
+<a href="http://www.macoratti.net/destaques.htm">
+    Destaques e novidades do SUPER DVD Visual Basic 
+(sempre atualizado) : clique e confira !</a> </span></font>
+<p align="left"><font face="Trebuchet MS" size="2" color="#800080">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer migrar para o 
+VB .NET ?</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">Veja mais sistemas completos para a 
+plataforma .NET no <b><a href="http://www.macoratti.net/superdvd.htm">
+Super DVD .NET</a></b> 
+, confira...</span></font></p>
+      </li>
+      <li>
+
+<p align="left">
+<a href="http://www.macoratti.net/curso_vbnet_basico.htm">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">
+<font face="Trebuchet MS" size="2">Curso Básico VB .NET - 
+Vídeo Aulas</font></span></a></p>
+
+      </li>
+    </ul>
+<p align="left"><font face="Trebuchet MS" color="#800080" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer aprender C# 
+??</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">Chegou o <b>
+<a href="http://www.macoratti.net/superdvdc.htm">
+Super DVD C#</a></b> com exclusivo material de 
+suporte e vídeo aulas com curso básico sobre C#.</span></font></p>
+
+      </li>
+      <li>
+<p align="left">
+<a class="dt" title="ir para Curso C# Basico " href="http://www.macoratti.net/curso_cshp_basico.htm">
+<font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Curso C# Basico - Video Aulas</span></font></a></p>
+
+      </li>
+    </ul>
+
+<p align="left"><font face="Trebuchet MS" color="#800080" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer 
+aprender os conceitos da Programação Orientada a objetos ?</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font face="Trebuchet MS" color="#0000FF">
+<span style="font-weight: 700; letter-spacing: 0,05em">
+<a href="http://www.macoratti.net/19/06/curso_fundamentos_oop.htm"><font size="2">Curso Fundamentos da Programação Orientada a 
+Objetos com VB .NET</font></a><font size="2"> </font> </span></font>
+<font size="2" face="Trebuchet MS">
+<img border="0" src="./Flutter - Obtendo dados da Web_files/new.gif" width="31" height="12"></font></p>
+      </li>
+    </ul>
+
+<p align="left"><font face="Trebuchet MS" color="#800080" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer 
+aprender o gerar relatórios com o ReportViewer no VS 2013 ?</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font color="#FF0000" face="Trebuchet MS">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">
+<a href="http://www.macoratti.net/curso_reportviewer.htm"><font size="2">&nbsp;Curso - Gerando 
+Relatórios com o ReportViewer no VS 2013 - Vídeo Aulas</font></a><font size="2">
+</font> </span></font><font face="Trebuchet MS" size="2" color="#0000FF">
+<span style="font-weight: 700; letter-spacing: 0,05em">
+&nbsp;</span></font><font size="2" face="Trebuchet MS"><img border="0" src="./Flutter - Obtendo dados da Web_files/new.gif" width="31" height="12"></font></p>
+      </li>
+    </ul>
+
+    </td>
+  </tr>
+</tbody></table>
+
+<p><font face="Trebuchet MS">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">Referências:</span></font></p>
+<ul>
+    <li style="BORDER-RIGHT: 0px; PADDING-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; BORDER-LEFT: 0px; LINE-HEIGHT: 1.2; PADDING-TOP: 0px; BORDER-BOTTOM: 0px">
+    <p style="margin-top: 0; margin-bottom: 0">
+    <font face="Trebuchet MS">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">
+    <a href="http://www.macoratti.net/pageview.aspx?catid=1">Seção VB .NET do Site Macoratti.net</a>
+    </span></font></p></li>
+    <li style="BORDER-RIGHT: 0px; PADDING-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; BORDER-LEFT: 0px; LINE-HEIGHT: 1.2; PADDING-TOP: 0px; BORDER-BOTTOM: 0px">
+    <p style="margin-top: 0; margin-bottom: 0">
+    <font face="Trebuchet MS">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875"><a href="http://www.macoratti.net/superdvd.htm">Super DVD .NET - A sua
+        porta de entrada na plataforma .NET</a> </span></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0"><font face="Trebuchet MS">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875"><a href="http://www.macoratti.net/Vendas/Produtos.aspx?ID=22">Super DVD Vídeo Aulas - Vídeo
+        Aula sobre VB .NET, ASP .NET e C#</a> </span></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0"><font face="Trebuchet MS">
+    <a href="http://www.macoratti.net/superdvdc.htm">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">Super DVD C# - Recursos de 
+    aprendizagens e vídeo aulas para C#</span></a></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+    <font face="Trebuchet MS">
+    <a href="http://www.macoratti.net/pageview.aspx?catid=18" style="letter-spacing:0.05em; line-height:1.6875">
+    Seção C# do site Macoratti.net</a></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+    <a href="http://www.macoratti.net/pageview.aspx?catid=3">
+    <font face="Trebuchet MS">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">Seção ASP .NET do 
+    site Macoratti .net</span></font></a></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+<a href="http://www.macoratti.net/curso_vbnet_basico.htm">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; ">
+    <font face="Trebuchet MS">Curso Básico VB .NET - 
+Vídeo Aulas</font></span></a></p></li>
+    <li>
+
+<p style="margin-top: 0; margin-bottom: 0">
+<a href="http://www.macoratti.net/curso_cshp_basico.htm">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; ">
+<font face="Trebuchet MS">Curso C# Básico - Vídeo Aulas</font></span></a></p>
+
+    </li>
+      <li>
+<p align="left" style="margin-top: 0; margin-bottom: 0">
+<font face="Trebuchet MS">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">
+<a href="http://www.macoratti.net/19/06/curso_fundamentos_oop.htm">Curso Fundamentos da Programação Orientada a 
+Objetos com VB .NET</a>
+</span></font></p>
+      </li>
+      <li>
+<p align="left" style="margin-top: 0; margin-bottom: 0">
+<b>
+<a href="https://www.facebook.com/Macoratti.net"><font face="Trebuchet MS">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">Macoratti 
+.net | Facebook</span></font></a></b></p>
+      </li>
+	<li>
+
+<p style="margin-top: 0; margin-bottom: 0">
+<font face="Trebuchet MS">
+<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;1&#39;,&#39;AFQjCNGklDEWUgs1tbkTpljp49h2rD-N6w&#39;,&#39;IsOmSi-Z_GqCVe2M4DU4fg&#39;,&#39;0CB0QFjAA&#39;,&#39;&#39;,&#39;&#39;,event)" style="letter-spacing: 0.05em; line-height: 1.6875; font-weight:700" href="http://www.youtube.com/user/macoratti">
+macoratti - YouTube</a></font></p>
+
+    </li>
+	<li>
+	<p style="margin-top: 0; margin-bottom: 0">
+	<font face="Trebuchet MS">
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;5&#39;,&#39;AFQjCNEnzFOxhl15WnUoI5eihhmAaL-r8Q&#39;,&#39;vhy82E_grLw5VmZ_RosHNA&#39;,&#39;0CDMQFjAE&#39;,&#39;&#39;,&#39;&#39;,event)" style="letter-spacing: 0.05em; line-height: 1.6875; font-weight:700" href="https://twitter.com/macorati">
+	Jose C Macoratti (@macorati) | Twitter</a></font></p></li>
+	<li>
+	<p style="margin-top: 0; margin-bottom: 0">
+	<font face="Trebuchet MS">
+	<a href="http://www.macoratti.net/pageview.aspx?catid=32">
+	<span style="letter-spacing: 0.05em; line-height:1.6875">
+	Seção Mobilie - 
+	Xamarin Android</span></a></font></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;5&#39;,&#39;AOvVaw0-XJAEFfHLVRu8_uPN9wkw&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjAEegQIARAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_lisb1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;5&#39;,&#39;AOvVaw0-XJAEFfHLVRu8_uPN9wkw&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjAEegQIARAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_lisb1.htm"><font face="Trebuchet MS">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - Lista 
+	Básica - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;1&#39;,&#39;AOvVaw15m5fl-BlDsNEP-k6DA_2b&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjAAegQIBRAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_matapp1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;1&#39;,&#39;AOvVaw15m5fl-BlDsNEP-k6DA_2b&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjAAegQIBRAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_matapp1.htm"><font face="Trebuchet MS">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - 
+	Apresentando o widget MaterialApp - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;2&#39;,&#39;AOvVaw3vuFTNTEoLAUYciKCtWZjf&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjABegQIAxAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/07/flut_stud1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;2&#39;,&#39;AOvVaw3vuFTNTEoLAUYciKCtWZjf&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjABegQIAxAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/07/flut_stud1.htm"><font face="Trebuchet MS">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - 
+	Apresentando Flutter Studio - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;3&#39;,&#39;AOvVaw0AAgNs2hvTBYQiB6l86Dpl&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjACegQIBhAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_widgt1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;3&#39;,&#39;AOvVaw0AAgNs2hvTBYQiB6l86Dpl&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjACegQIBhAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_widgt1.htm"><font face="Trebuchet MS">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - 
+	Apresentando Widgets - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;7&#39;,&#39;AOvVaw1rRuaFUzf1XpjwsZG8oPWg&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjAGegQIABAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/07/flut_tlogin1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;7&#39;,&#39;AOvVaw1rRuaFUzf1XpjwsZG8oPWg&#39;,&#39;&#39;,&#39;2ahUKEwiSm-mGmvvhAhXZG7kGHSjPB_oQFjAGegQIABAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/07/flut_tlogin1.htm"><font face="Trebuchet MS">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - Criando 
+	uma tela de login - Macoratti</span></font></a></p></li>
+</ul>
+
+<hr size="0">
+
+<p align="center"><a href="http://www.macoratti.net/"><font size="2" face="Verdana">José Carlos Macoratti</font></a></p>
+</div>
+</div>
+
+</body></html>
