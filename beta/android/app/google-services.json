@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "382568748904",
+    "firebase_url": "https://openjob-c4917.firebaseio.com",
+    "project_id": "openjob-c4917",
+    "storage_bucket": "openjob-c4917.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382568748904:android:961e6b83993d76c9a3e8dd",
+        "android_client_info": {
+          "package_name": "openjob.exemplo.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382568748904-tb3pinpj48f70t2ehgrmd2ecjklqh2rr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNHTsb3tsrLzkdxwmXgvH4EcmQUwtN56U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382568748904-tb3pinpj48f70t2ehgrmd2ecjklqh2rr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

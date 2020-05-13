@@ -1,0 +1,577 @@
+
+<!-- saved from url=(0046)http://www.macoratti.net/19/08/flut_pjson1.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<title>Flutter - Fazendo o Parser do JSON </title>
+<style type="text/css">
+body {
+	margin:0;
+	padding:0;
+	background:#cccccc;
+	text-align:center; /* hack para o IE */	
+}
+#tudo {
+	width: 955px;
+	margin:0 auto;			
+	padding: 5px;
+	text-align:left; /* "remédio" para o hack do IE */	
+}
+#conteudo {
+	padding: 5px;
+	background-color: #ffffff;
+}
+.fontstyle0
+{
+	font-family:LiberationSerif;
+	font-size:15pt;
+	font-style:normal;
+	font-weight:normal;
+	color:rgb(0,0,0);
+}
+.fontstyle1
+{
+	font-family:LiberationSerif;
+	font-size:15pt;
+	font-style:normal;
+	font-weight:normal;
+	color:rgb(0,0,0);
+}
+.fontstyle2
+{
+	font-family:LiberationMono;
+	font-size:12pt;
+	font-style:normal;
+	font-weight:normal;
+	color:rgb(0,0,0);
+}
+</style></head>
+
+
+<body data-gr-c-s-loaded="true">
+<div id="tudo">
+<div id="conteudo">
+
+
+<p><b><font color="#004080" size="5" face="Segoe UI">&nbsp;</font></b><strong><font color="#000080" size="5" face="Trebuchet MS"><img border="0" src="./Flutter - Fazendo o Parser do JSON_files/maco10.gif" width="233" height="32"></font></strong><font color="#800080" size="5" face="Segoe UI"><b>Flutter 
+- Fazendo o Parser de JSON </b></font></p>
+
+<hr>
+
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="97%">
+  <tbody><tr>
+    <td width="5%" align="center">
+    <font face="Trebuchet MS" size="3">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">
+    <img border="0" src="./Flutter - Fazendo o Parser do JSON_files/mac3_1.jpg" width="73" height="92"></span></font></td>
+    <td width="64%">
+    <span style="letter-spacing: 0.05em"><font face="Trebuchet MS">&nbsp;Hoje 
+	veremos como realizar o parser de arquivos JSON a nível básico</font></span></td>
+    <td width="13%">
+    <p align="center">
+	<img border="0" src="./Flutter - Fazendo o Parser do JSON_files/flut_1.png" width="40" height="49"></p></td>
+  </tr>
+</tbody></table>
+
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O Flutter é um 
+SDK de aplicativo móvel do Google que ajuda a criar aplicativos móveis modernos 
+para iOS e Android usando uma única (<i>quase</i>) base de código.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Se você não 
+conhece o Flutter veja o meu artigo :&nbsp; <a href="http://www.macoratti.net/19/06/flut_intro1.htm">Flutter - 
+Primeiros contatos e impressões</a></font></span></p>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">Fazendo o Parser do JSON</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">JSON significa<font color="#0000FF"> 
+Java Script Object Notation</font> e é um formato para intercâmbio de dados aberto e 
+baseado em texto fácil de ler e de escrever.</font></span></p>
+<p><font face="Trebuchet MS"><span style="letter-spacing: 0.05em">As principais 
+regras de sintaxe JSON são:</span></font></p>
+<ul>
+	<li><font face="Trebuchet MS" color="#800080">
+	<span style="letter-spacing: 0.05em">Dados JSON estão definidos aos pares no 
+	formato: chave : valor</span></font></li>
+	<li><font face="Trebuchet MS" color="#800080">
+	<span style="letter-spacing: 0.05em">Os dados são separados por vírgulas(,)</span></font></li>
+	<li><font face="Trebuchet MS" color="#800080">
+	<span style="letter-spacing: 0.05em">As chaves {} contém objetos</span></font></li>
+	<li><font face="Trebuchet MS" color="#800080">
+	<span style="letter-spacing: 0.05em">Os colchetes [] expressam 
+	matrizes/vetores</span></font></li>
+</ul>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">A linguagem 
+Dart oferece suporte para analisar arquivos JSON, e, usando a biblioteca<font color="#0000FF"> 
+convert.dart </font>para converter o Json<i> (se for o json válido)</i> em um
+<font color="#0000FF">Map</font> com chaves de string e objetos dinâmicos.
+</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Você pode 
+analisar o json diretamente e usar o mapa ou pode analisá-lo e colocá-lo em um 
+objeto tipado para que seus dados tenham uma estrutura e sejam mais fáceis de 
+manter.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS"><b>Nota :</b> 
+Na linguagem Dart , a classe <font color="#0000FF">Map</font> é uma coleção de 
+pares <font color="#0000FF">chave/valor</font>, a partir dos quais você recupera 
+um valor usando sua chave associada.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Podemos fazer 
+o parse diretamente conforme mostra o código a seguir:</font></span></p>
+<table border="0" width="63%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<pre><span style="letter-spacing: 0.05em"><font face="Trebuchet MS" size="3">import 'dart:convert';</font></span></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">var jsonData = '{ "nome" : "Paulo", "email" : "<a href="mailto:paulo@hotmail.com">paulo@hotmail.com</a>"  }';
+
+var parsedJson =<font color="#0000FF"> json.decode(jsonData);</font>
+
+print('${parsedJson.runtimeType} : $parsedJson');</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Executando o 
+código acima em : <b> <font color="#0000FF">dartpad.dartlang.org</font></b> iremos obter 
+o seguinte resultado:</font></span></p>
+<p><img border="0" src="./Flutter - Fazendo o Parser do JSON_files/flut_pjson11.jpg" width="850" height="462"></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Podemos então 
+acessar os dados analisados&nbsp; usando o índice da chave no mapa retornado. 
+Vamos indexar no mapa e obter<font color="#0000FF"> o nome e o email.</font></font></span></p>
+<table border="0" width="74%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">import 'dart:convert';</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">void main() {</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  var jsonData = '{ "nome" : "Paulo", "email" : "paulo@hotmail.com"  }';</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  var parsedJson = json.decode(jsonData);</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  print('${parsedJson.runtimeType} : $parsedJson');  </span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  <font color="#0000FF">var nome = parsedJson['nome'];
+  var email = parsedJson['email'];  </font></span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  <font color="#0000FF">print('$nome e $email');  </font></span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Executando o 
+código acima em : <font color="#0000FF">dartpad.dartlang.org</font> iremos obter 
+o seguinte resultado:</font></span></p>
+<p><img border="0" src="./Flutter - Fazendo o Parser do JSON_files/flut_pjson12.jpg" width="892" height="434"></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Vamos iniciar 
+com uma estrutura de um arquivo JSON bem simples que representa um Map ou mapa.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Veremos agora 
+como fazer um mapeamento para um arquivo JSON simples</font></span></p>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">Mapeando JSON para objetos</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">A seguir temos 
+o arquivo <font color="#0000FF">aluno.json <i>(criado na pasta Json do projeto)</i></font></font></span></p>
+<table border="1" width="36%" bordercolor="#F2F2F2">
+	<tbody><tr>
+		<td bgcolor="#F2F2F2">
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">{
+  "id":"1245",
+  "nome":"Paula Soares",
+  "nota" : 90
+}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Assim nas 
+strings JSON podemos ter duas possibilidades de <font color="#0000FF">Map</font>:</font></span></p>
+<ol>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Se houver 
+	apenas c<font color="#0000FF">haves {}</font> a string vai conter um
+	<font color="#0000FF">Map&lt;x,y&gt;</font> que é representando por 
+	pares chave:</font></span></li>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Se houver 
+	colchetes <font color="#0000FF">[]</font> a string vai conter uma lista de mapas <font color="#0000FF">
+	List&lt;Map&gt;</font>;</font></span></li>
+</ol>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Nosso arquuivo
+<font color="#0000FF">aluno.json</font> é um mapa (<font color="#0000FF">Map</font>) 
+onde id é chave e 1245 é o valor para id.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Vamos criar um 
+arquivo<font color="#0000FF"> PODO (Plain Old Dart Object)</font> para este 
+arquivo JSON.<font color="#0000FF"><i>(criado na pasta model)</i></font></font></span></p>
+<table border="1" width="36%" bordercolor="#F2F2F2">
+	<tbody><tr>
+		<td bgcolor="#F2F2F2">
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">class Aluno {
+  String alunoId;
+  String alunoNome;
+  int alunoNotas;</span></font></pre>
+		<pre><span style="letter-spacing: 0.05em"><font face="Trebuchet MS" size="3">  Aluno</font></span><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">({
+    this.alunoId,
+    this.alunoNome,
+    this.alunoNotas
+  });</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Mas olhando a 
+nossa classe <font color="#0000FF">Aluno</font> e para o arquivo
+<font color="#0000FF">aluno.json</font> parece que não existe um mapeamento 
+entre eles, mesmo os nomes das entidades não coincidem.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Então o nosso 
+trabalho será realizar o mapeamento dos membros da classe para o objeto json.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Para isso 
+precisamos criar um método <font color="#0000FF">factory</font>.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Conforme a 
+documentação da linguagem Dart usamos a palavra-chave <font color="#0000FF">
+factory</font> para implementar um construtor que não cria uma nova instância da 
+sua classe (como um <font color="#0000FF">Singleton</font>) e é isso que 
+precisamos.</font></span></p>
+<table border="1" width="64%" bordercolor="#F2F2F2">
+	<tbody><tr>
+		<td bgcolor="#F2F2F2">
+		<font face="Trebuchet MS"><span style="letter-spacing: 0.05em">factory
+		<font color="#0000FF">Aluno.fromJson</font>(Map&lt;String, dynamic&gt; 
+		parsedJson){<br>
+&nbsp;&nbsp;&nbsp; return Aluno(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alunoId: parsedJson['id'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alunoNome : parsedJson['nome'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alunoNotas : parsedJson ['nota']<br>
+&nbsp;&nbsp;&nbsp; );<br>
+&nbsp; }</span></font></td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Neste código 
+estamos criando um método <font color="#0000FF">factory</font> chamado
+<font color="#0000FF">Aluno.fromJson</font>, cujo objetivo é simplesmente 
+desserializar o nosso JSON, onde <font color="#0000FF">desserializar</font> 
+significa converter de bytes para objeto sendo que o processo oposto, converter 
+de objeto para uma sequência linear de bytes é conhecido como
+<font color="#0000FF">serializar</font>.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Agora, observe 
+o parâmetro usado no método fromJson. É um <font color="#0000FF">Map&lt;String, 
+dynamic&gt;</font>, e, isso significa que ele mapeia uma chave
+<font color="#0000FF">String</font> com um valor <font color="#0000FF">dynamic</font>. 
+É exatamente por isso que precisamos identificar a estrutura. Se essa estrutura 
+json fosse uma lista de mapas, esse parâmetro teria sido definido diferente.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Nossa classe 
+agora ficou assim:</font></span></p>
+<table border="1" width="36%" bordercolor="#F2F2F2">
+	<tbody><tr>
+		<td bgcolor="#F2F2F2">
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">class Aluno {
+  String alunoId;
+  String alunoNome;
+  int alunoNotas;</span></font></pre>
+		<pre><span style="letter-spacing: 0.05em"><font face="Trebuchet MS" size="3">  Aluno</font></span><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">({
+    this.alunoId,
+    this.alunoNome,
+    this.alunoNotas
+  });</span></font></pre>
+		<pre><font face="Trebuchet MS"><span style="letter-spacing: 0.05em"><font size="3">factory Aluno.fromJson(Map&lt;String, dynamic&gt; parsedJson){
+    return Aluno(
+      alunoId: parsedJson['id'],
+      alunoNome : parsedJson['nome'],
+      alunoNotas : parsedJson ['nota']
+    );
+  }</font></span></font><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">
+}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em">
+<font face="Trebuchet MS" size="5" color="#800080">E como podemos acessar o 
+objeto ?</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Vamos definir 
+um código Dart em um arquivo chamado <font color="#0000FF">aluno_service.dart</font> 
+em uma pasta <font color="#0000FF">services</font> para retornar os valores do 
+objeto <font color="#0000FF">Aluno</font>.</font></span></p>
+<table border="0" width="60%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">import 'dart:convert';
+import 'dart:async' show Future;
+import 'package:flutter/services.dart' show rootBundle;
+import '../model/aluno.dart';</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em"><font color="#0000FF">Future&lt;String&gt;</font> _carregaAlunoJson() async {
+  return await rootBundle.loadString('Json/aluno.json');
+}</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">Future carregaAluno() async {
+  String jsonString = await<font color="#0000FF"> _carregaAlunoJson();</font>
+  final jsonResponse = <font color="#0000FF">json.decode(jsonString);
+</font>
+  Aluno aluno = new Aluno.<font color="#0000FF">fromJson(jsonResponse);</font>
+
+  print(<font color="#0000FF">aluno.alunoNotas)</font>;</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Aqui estamos 
+usando um <font color="#0000FF">Future</font>.&nbsp; </font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">O que é
+<font color="#0000FF">Future</font> ?</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Um 
+<font color="#0000FF">Future</font> é um 
+objeto<font color="#0000FF"> Future&lt;T&gt;</font>, que representa uma operação 
+assíncrona que produz um resultado do tipo T. Se o resultado não for um valor 
+utilizável, o tipo do futuro será <font color="#0000FF">Future&lt;void&gt;</font>. 
+Quando uma função que retorna um futuro é invocada, duas coisas acontecem:<br>
+<br>
+1- A função enfileira o trabalho a ser feito e retorna um objeto 
+<font color="#0000FF">Future</font> não 
+concluído.<br>
+2- Posteriormente, quando a operação for concluída, o objeto 
+<font color="#0000FF">Future</font> será 
+concluído com um valor ou com um erro.</font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">E quando 
+escrevemos código que depende de um <font color="#0000FF">Future</font> podemos 
+usar<font color="#0000FF"> async e await.</font></font></span></p>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">No método
+<font color="#0000FF">carregaAluno</font> estamos realizando as seguintes 
+tarefas :</font></span></p>
+<ol>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">
+	carregamos os dados JSON a partir do arquivo <font color="#0000FF">
+	aluno.json</font></font></span></li>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">
+	decodificamos a string JSON</font></span></li>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">
+	desserializamos a resposta Json decodificada chamando o método
+	<font color="#0000FF">Aluno.fromJson </font></font></span></li>
+	<li><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">
+	Imprimimos o valor da nota do aluno a partir da classe <font color="#0000FF">
+	Aluno</font></font></span></li>
+</ol>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Para ver isso 
+funcionando na janela do console defina no arquivo <font color="#0000FF">
+main.dart</font> o código abaixo:</font></span></p>
+<table border="0" width="60%" bgcolor="#F2F2F2">
+	<tbody><tr>
+		<td>
+		<pre><font face="Trebuchet MS" size="3" color="#0000FF"><span style="letter-spacing: 0.05em">import 'package:flutter/material.dart';
+import '../services/aluno_service.dart';</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">void main() {
+  runApp(new MyApp());
+ <font color="#0000FF"> carregaAluno();</font>
+}</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">class MyApp extends StatelessWidget {</span></font></pre>
+		<pre><font face="Trebuchet MS" size="3"><span style="letter-spacing: 0.05em">  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+        home: Text("Json")
+    );
+  }
+}</span></font></pre>
+		</td>
+	</tr>
+</tbody></table>
+<p><span style="letter-spacing: 0.05em"><font face="Trebuchet MS">Pegue os 
+arquivos do projeto aqui : </font><font face="Segoe UI"> 
+	<img border="0" src="./Flutter - Fazendo o Parser do JSON_files/downl.gif" width="16" height="16"> 
+<b> 
+<a href="http://www.macoratti.net/19/08/projeto_flutter_json.txt">projeto_flutter_json.txt</a></b></font></span></p>
+<p><span style="letter-spacing: 0.05em; font-style: italic">
+<font face="Trebuchet MS">"Disse-lhe, pois, Pilatos: Logo tu és rei? Jesus 
+respondeu: Tu dizes que eu sou rei. Eu para isso nasci, e para isso vim ao 
+mundo, a fim de dar testemunho da verdade. Todo aquele que é da verdade ouve a 
+minha voz."<br>
+<a href="https://www.bibliaonline.com.br/acf/jo/18/37+">João 18:37</a></font></span></p>
+
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="81%" bgcolor="#FFFFE1">
+  <tbody><tr>
+    <td width="90%" bordercolor="#FFFFE1" bgcolor="#F2F2F2">
+	<font face="Trebuchet MS" size="2">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875"><a href="http://www.macoratti.net/destaque.htm">
+    Veja os </a>
+<a href="http://www.macoratti.net/destaques.htm">
+    Destaques e novidades do SUPER DVD Visual Basic 
+(sempre atualizado) : clique e confira !</a> </span></font>
+<p align="left"><font face="Trebuchet MS" size="2" color="#800080">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer migrar para o 
+VB .NET ?</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">Veja mais sistemas completos para a 
+plataforma .NET no <b><a href="http://www.macoratti.net/superdvd.htm">
+Super DVD .NET</a></b> 
+, confira...</span></font></p>
+      </li>
+      <li>
+
+<p align="left">
+<a href="http://www.macoratti.net/curso_vbnet_basico.htm">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">
+<font face="Trebuchet MS" size="2">Curso Básico VB .NET - 
+Vídeo Aulas</font></span></a></p>
+
+      </li>
+    </ul>
+<p align="left"><font face="Trebuchet MS" color="#800080" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer aprender C# 
+??</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">Chegou o <b>
+<a href="http://www.macoratti.net/superdvdc.htm">
+Super DVD C#</a></b> com exclusivo material de 
+suporte e vídeo aulas com curso básico sobre C#.</span></font></p>
+
+      </li>
+      <li>
+<p align="left">
+<a class="dt" title="ir para Curso C# Basico " href="http://www.macoratti.net/curso_cshp_basico.htm">
+<font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Curso C# Basico - Video Aulas</span></font></a></p>
+
+      </li>
+    </ul>
+
+<p align="left"><font face="Trebuchet MS" color="#800080" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer 
+aprender os conceitos da Programação Orientada a objetos ?</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font face="Trebuchet MS" color="#0000FF">
+<span style="font-weight: 700; letter-spacing: 0,05em">
+<a href="http://www.macoratti.net/19/08/curso_fundamentos_oop.htm"><font size="2">Curso Fundamentos da Programação Orientada a 
+Objetos com VB .NET</font></a><font size="2"> </font> </span></font>
+<font size="2" face="Trebuchet MS">
+<img border="0" src="./Flutter - Fazendo o Parser do JSON_files/new.gif" width="31" height="12"></font></p>
+      </li>
+    </ul>
+
+<p align="left"><font face="Trebuchet MS" color="#800080" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">Quer 
+aprender o gerar relatórios com o ReportViewer no VS 2013 ?</span></font></p>
+    <ul>
+      <li>
+<p align="left"><font color="#FF0000" face="Trebuchet MS">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight: 700">
+<a href="http://www.macoratti.net/curso_reportviewer.htm"><font size="2">&nbsp;Curso - Gerando 
+Relatórios com o ReportViewer no VS 2013 - Vídeo Aulas</font></a><font size="2">
+</font> </span></font><font face="Trebuchet MS" size="2" color="#0000FF">
+<span style="font-weight: 700; letter-spacing: 0,05em">
+&nbsp;</span></font><font size="2" face="Trebuchet MS"><img border="0" src="./Flutter - Fazendo o Parser do JSON_files/new.gif" width="31" height="12"></font></p>
+      </li>
+    </ul>
+
+    </td>
+  </tr>
+</tbody></table>
+
+<p><font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; font-weight:700">Referências:</span></font></p>
+<ul>
+    <li style="BORDER-RIGHT: 0px; PADDING-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; BORDER-LEFT: 0px; LINE-HEIGHT: 1.2; PADDING-TOP: 0px; BORDER-BOTTOM: 0px">
+    <p style="margin-top: 0; margin-bottom: 0">
+    <font face="Trebuchet MS" size="2">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">
+    <a href="http://www.macoratti.net/pageview.aspx?catid=1">Seção VB .NET do Site Macoratti.net</a>
+    </span></font></p></li>
+    <li style="BORDER-RIGHT: 0px; PADDING-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; BORDER-LEFT: 0px; LINE-HEIGHT: 1.2; PADDING-TOP: 0px; BORDER-BOTTOM: 0px">
+    <p style="margin-top: 0; margin-bottom: 0">
+    <font face="Trebuchet MS" size="2">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875"><a href="http://www.macoratti.net/superdvd.htm">Super DVD .NET - A sua
+        porta de entrada na plataforma .NET</a> </span></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+	<font face="Trebuchet MS" size="2">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875"><a href="http://www.macoratti.net/Vendas/Produtos.aspx?ID=22">Super DVD Vídeo Aulas - Vídeo
+        Aula sobre VB .NET, ASP .NET e C#</a> </span></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+	<font face="Trebuchet MS" size="2">
+    <a href="http://www.macoratti.net/superdvdc.htm">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">Super DVD C# - Recursos de 
+    aprendizagens e vídeo aulas para C#</span></a></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+    <font face="Trebuchet MS" size="2">
+    <a href="http://www.macoratti.net/pageview.aspx?catid=18" style="letter-spacing:0.05em; line-height:1.6875">
+    Seção C# do site Macoratti.net</a></font></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+    <a href="http://www.macoratti.net/pageview.aspx?catid=3">
+    <font face="Trebuchet MS" size="2">
+    <span style="letter-spacing: 0.05em; line-height: 1.6875">Seção ASP .NET do 
+    site Macoratti .net</span></font></a></p></li>
+    <li>
+    <p style="margin-top: 0; margin-bottom: 0">
+<a href="http://www.macoratti.net/curso_vbnet_basico.htm">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; ">
+    <font face="Trebuchet MS" size="2">Curso Básico VB .NET - 
+Vídeo Aulas</font></span></a></p></li>
+    <li>
+
+<p style="margin-top: 0; margin-bottom: 0">
+<a href="http://www.macoratti.net/curso_cshp_basico.htm">
+<span style="letter-spacing: 0.05em; line-height: 1.6875; ">
+<font face="Trebuchet MS" size="2">Curso C# Básico - Vídeo Aulas</font></span></a></p>
+
+    </li>
+      <li>
+<p align="left" style="margin-top: 0; margin-bottom: 0">
+<font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">
+<a href="http://www.macoratti.net/19/08/curso_fundamentos_oop.htm">Curso Fundamentos da Programação Orientada a 
+Objetos com VB .NET</a>
+</span></font></p>
+      </li>
+      <li>
+<p align="left" style="margin-top: 0; margin-bottom: 0">
+<b>
+<a href="https://www.facebook.com/Macoratti.net">
+<font face="Trebuchet MS" size="2">
+<span style="letter-spacing: 0.05em; line-height: 1.6875">Macoratti 
+.net | Facebook</span></font></a></b></p>
+      </li>
+	<li>
+
+<p style="margin-top: 0; margin-bottom: 0">
+<font face="Trebuchet MS" size="2">
+<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;1&#39;,&#39;AFQjCNGklDEWUgs1tbkTpljp49h2rD-N6w&#39;,&#39;IsOmSi-Z_GqCVe2M4DU4fg&#39;,&#39;0CB0QFjAA&#39;,&#39;&#39;,&#39;&#39;,event)" style="letter-spacing: 0.05em; line-height: 1.6875; font-weight:700" href="http://www.youtube.com/user/macoratti">
+macoratti - YouTube</a></font></p>
+
+    </li>
+	<li>
+	<p style="margin-top: 0; margin-bottom: 0">
+	<font face="Trebuchet MS" size="2">
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;5&#39;,&#39;AFQjCNEnzFOxhl15WnUoI5eihhmAaL-r8Q&#39;,&#39;vhy82E_grLw5VmZ_RosHNA&#39;,&#39;0CDMQFjAE&#39;,&#39;&#39;,&#39;&#39;,event)" style="letter-spacing: 0.05em; line-height: 1.6875; font-weight:700" href="https://twitter.com/macorati">
+	Jose C Macoratti (@macorati) | Twitter</a></font></p></li>
+	<li>
+	<p style="margin-top: 0; margin-bottom: 0">
+	<span style="font-weight: 700; letter-spacing: 0.05em">
+	<font face="Trebuchet MS" size="2">
+	<a href="http://www.macoratti.net/pageview.aspx?catid=32">Seção Mobilie - 
+	Xamarin Android</a></font></span></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;1&#39;,&#39;AOvVaw15m5fl-BlDsNEP-k6DA_2b&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjAAegQIAxAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_matapp1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;1&#39;,&#39;AOvVaw15m5fl-BlDsNEP-k6DA_2b&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjAAegQIAxAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_matapp1.htm">
+	<font face="Trebuchet MS" size="2">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - 
+	Apresentando o widget MaterialApp - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;2&#39;,&#39;AOvVaw3vuFTNTEoLAUYciKCtWZjf&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjABegQIABAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/07/flut_stud1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;2&#39;,&#39;AOvVaw3vuFTNTEoLAUYciKCtWZjf&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjABegQIABAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/07/flut_stud1.htm">
+	<font face="Trebuchet MS" size="2">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - 
+	Apresentando Flutter Studio - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;4&#39;,&#39;AOvVaw0-XJAEFfHLVRu8_uPN9wkw&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjADegQIBRAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_lisb1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;4&#39;,&#39;AOvVaw0-XJAEFfHLVRu8_uPN9wkw&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjADegQIBRAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_lisb1.htm">
+	<font face="Trebuchet MS" size="2">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - Lista 
+	Básica - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;6&#39;,&#39;AOvVaw0AAgNs2hvTBYQiB6l86Dpl&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjAFegQIAhAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_widgt1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;6&#39;,&#39;AOvVaw0AAgNs2hvTBYQiB6l86Dpl&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjAFegQIAhAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_widgt1.htm">
+	<font face="Trebuchet MS" size="2">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - 
+	Apresentando Widgets - Macoratti</span></font></a></p></li>
+	<li>
+	<a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;9&#39;,&#39;AOvVaw2XXRl3NgxVZIrx1eykGcW_&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjAIegQICBAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_web1.htm">
+	</a><p style="margin-top: 0; margin-bottom: 0"><a onmousedown="return rwt(this,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;9&#39;,&#39;AOvVaw2XXRl3NgxVZIrx1eykGcW_&#39;,&#39;&#39;,&#39;2ahUKEwiCqofW95DiAhWSA9QKHfR8B8EQFjAIegQICBAB&#39;,&#39;&#39;,&#39;&#39;,event)" href="http://www.macoratti.net/19/06/flut_web1.htm">
+	<font face="Trebuchet MS" size="2">
+	<span style="letter-spacing: 0.05em; line-height: 1.6875">Flutter - Obtendo 
+	dados da Web - Macoratti</span></font></a></p></li>
+</ul>
+
+<hr size="0">
+
+<p align="center"><a href="http://www.macoratti.net/"><font size="2" face="Verdana">José Carlos Macoratti</font></a></p>
+</div>
+</div>
+
+</body></html>
